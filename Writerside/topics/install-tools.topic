@@ -5,7 +5,7 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Installing Additional Tools" id="install-tools">
 
-    <var name="section" value="the installation of additional required tools"/>
+    <var name="section" value="shows you how to install additional required tools"/>
     <var name="filename" value="installtools.sh"/>
     <var name="code" value="
         cd ~/marian/
@@ -15,7 +15,7 @@
         make
         "/>
     <var name="additionally" value=""/>
-    <var name="result" value="installed the additional required tools"/>
+    <var name="result" value="installed any additional required tools"/>
 
     <include from="template-get.topic" element-id="get"/>
 </topic>

@@ -6,7 +6,7 @@
        title="template-get" id="template-get">
 
     <snippet id="get">
-        <p>This section guides you through %section%.</p>
+        <p>This section %section%.</p>
 
         <procedure type="steps">
             <step>

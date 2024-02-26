@@ -5,7 +5,7 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Training the Model" id="train">
 
-    <var name="section" value="training you model"/>
+    <var name="section" value="this section shows you how you can train you model"/>
     <var name="filename" value="installmarian.sh"/>
     <var name="code" value="
 

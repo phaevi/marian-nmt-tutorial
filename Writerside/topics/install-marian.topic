@@ -5,7 +5,7 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Installing Marian NMT" id="install-marian">
 
-    <var name="section" value="the installation of Marian NMT"/>
+    <var name="section" value="guides you through the installation of Marian NMT"/>
     <var name="filename" value="installmarian.sh"/>
     <var name="code" value="
         #replace [VERISION] with the CUDA version you have installed (e.g. 12.3)
