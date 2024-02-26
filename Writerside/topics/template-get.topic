@@ -29,7 +29,7 @@
                     <shortcut>V</shortcut>:
                 </p>
                 <code-block lang="bash" collapsible="true">%code%</code-block>
-                <note>%additionally%</note>
+                <note filter="additionally">%additionally%</note>
             </step>
             <step>
                 Close the file.

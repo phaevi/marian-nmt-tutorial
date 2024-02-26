@@ -17,5 +17,5 @@
     <var name="additionally" value=""/>
     <var name="result" value="installed any additional required tools"/>
 
-    <include from="template-get.topic" element-id="get"/>
+    <include from="template-get.topic" element-id="get" use-filter="!additionally"/>
 </topic>
