@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="template-get" id="template-get">
+
+    <snippet id="get">
+        <p>This section guides you through %section%.</p>
+
+        <procedure type="steps">
+            <step>
+                Open the terminal.
+                (Press: <shortcut>Ctrl</shortcut>+<shortcut>Alt
+                </shortcut>+<shortcut>T</shortcut>)
+            </step>
+            <step>
+                Switch to your home directory.
+                (Execute: <code>cd ~</code>)
+            </step>
+            <step>
+                Create the file <code>%filename%</code>.
+                (Execute: <code>nano %filename%</code>)
+            </step>
+            <step>
+                <p>
+                    Paste the following code into the file using
+                    <shortcut>Ctrl</shortcut>+<shortcut>Shift</shortcut>+
+                    <shortcut>V</shortcut>:
+                </p>
+                <code-block lang="bash" collapsible="true">%code%</code-block>
+                <note>%additionally%</note>
+            </step>
+            <step>
+                Close the file.
+                (<shortcut>Ctrl</shortcut>+<shortcut>X</shortcut>)
+            </step>
+            <step>
+                Save the changes.
+                (<shortcut>Y</shortcut>)
+            </step>
+            <step>
+                Allow the file to be executed.
+                (<code>chmod +x %filename%</code>)
+            </step>
+            <step>
+                Execute the file.
+                (<code>./%filename%</code>)
+            </step>
+        </procedure>
+
+        <p>You have now successfully %result%.</p>
+    </snippet>
+</topic>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Training the Model" id="train">
+
+    <var name="section" value="training you model"/>
+    <var name="filename" value="installmarian.sh"/>
+    <var name="code" value="
+
+        # replace [SOURCE] and [TARGET] with language codes such as en, de, fr etc.
+
+        src=[SOURCE]
+
+        trg=[TARGET]
+
+        mini-batch-fit=4000
+
+        marian=build
+
+        marian_train=$marian/marian$EXT
+
+        MARIAN_SCORER=$marian/marian-scorer$EXT
+
+
+
+        # set chosen gpus
+
+        GPUS=0
+
+        if [ $# -ne 0 ]
+
+        then
+
+        GPUS=$@
+
+        fi
+
+        echo Using GPUs: $GPUS
+
+
+
+        if [ ! -e $marian_train ]
+
+        then
+
+        echo &quot;Marian NMT is not installed in $marian, you need to compile the toolkit first&quot;
+
+            exit 1
+
+            fi
+
+
+
+            mkdir -p model
+
+
+
+            # CAUTION: No comments (&quot;# ...&quot;) within Marian parameter list
+
+            # CAUTION: No blanks after line separator &quot;\&quot; in Marian parameter list
+
+
+
+            # train model
+
+            if [ ! -e &quot;model/model.npz.best-translation.npz&quot; ]
+
+            then
+
+            $marian_train \
+            --devices $GPUS --sync-sgd --seed 1111 \
+            --model model/model.npz --type transformer \
+            --train-sets data/corpus.bpe.$src data/corpus.bpe.$trg \
+            --max-length 100 \
+            --vocabs model/vocab.$src$trg.yml model/vocab.$src$trg.yml \
+            --mini-batch-fit -w $mini-batch-fit --maxi-batch 1000 \
+            --early-stopping 10 --cost-type=ce-mean-words \
+            --valid-freq 5000 --save-freq 5000 --disp-freq 500 \
+            --valid-metrics translation ce-mean-words perplexity cross-entropy \
+            --valid-sets data/corpus-dev.bpe.$src data/corpus-dev.bpe.$trg \
+            --valid-script-path &quot;bash .marian/marian-examples/training-basics/validate.sh&quot; \
+            --valid-translation-output data/valid.bpe.$trg.output --quiet-translation \
+            --valid-mini-batch 64 \
+            --beam-size 6 --normalize 0.6 \
+            --log model/train.log --valid-log model/valid.log \
+            --enc-depth 6 --dec-depth 6 \
+            --transformer-heads 8 \
+            --transformer-postprocess-emb d \
+            --transformer-postprocess dan \
+            --transformer-dropout 0.1 --label-smoothing 0.1 \
+            --learn-rate 0.0003 --lr-warmup 16000 --lr-decay-inv-sqrt 16000 --lr-report \
+            --optimizer-params 0.9 0.98 1e-09 --clip-norm 5 \
+            --tied-embeddings-all \
+            --exponential-smoothing \
+            --overwrite --keep-best
+
+            fi
+    "/>
+    <var name="additionally" value="
+        Replace [SOURCE] and [TARGET] with language codes such as en, de, fr etc.).
+        "/>
+    <var name="result" value="trained the model"/>
+
+    <include from="template-get.topic" element-id="get"/>
+</topic>

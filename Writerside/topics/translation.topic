@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Using the Model for Translation" id="translation">
+
+
+    <p>This section guides you through the translation process.</p>
+
+    <procedure>
+        <step>
+            Switch to the <code>marian</code> directory.
+            (Execute: <code>cd ~/marian</code>)
+        </step>
+        <step>
+            Execute <code>translate.sh</code>.
+            (<code>./translate.sh</code>)
+        </step>
+        <step>
+            You can find the translated output in the file named
+            <code>input.$trg.output</code> in
+            <code>~/marian/output</code>
+            ($trg is replaced with your target language).
+        </step>
+    </procedure>
+
+    <p>You have now successfully translated the input file.</p>
+</topic>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Marian NMT Tutorial" id="main">
+
+    <p>
+        Marian NMT is a toolkit for creating your own NMT System.
+        This tutorial, which is aimed at beginners, guides you through the setup
+        of Marian NMT and a Model for machine translation.
+    </p>
+    <p>
+        This tutorial is based on the tutorial by Reinhard Rapp which you can find
+        <a href="https://sites.google.com/view/mttutorial">here</a>.
+    </p>
+    <note>
+        The tutorial by Reinhard Rapp also lists hardware requirements.
+        You should check the suitability of your system beforehand.
+    </note>
+    <note>
+        This tutorial requires you to have Ubuntu and CUDA installed.
+        You need to know the installed CUDA version for one of the scripts in the tutorial.
+    </note>
+    <chapter title="Resources" id="resources">
+        <p>
+            Marian NMT: <a href="https://marian-nmt.github.io/"/>
+        </p>
+        <p>
+            Europarl Corpus: <a href="https://www.statmt.org/europarl/"/>
+        </p>
+    </chapter>
+</topic>

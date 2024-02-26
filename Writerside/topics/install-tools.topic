@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Installing Additional Tools" id="install-tools">
+
+    <var name="section" value="the installation of additional required tools"/>
+    <var name="filename" value="installtools.sh"/>
+    <var name="code" value="
+        cd ~/marian/
+        git clone https://github.com/marian-nmt/marian-examples.git
+        cd marian-examples/
+        cd tools/
+        make
+        "/>
+    <var name="additionally" value=""/>
+    <var name="result" value="installed the additional required tools"/>
+
+    <include from="template-get.topic" element-id="get"/>
+</topic>

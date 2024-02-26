@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="hi" name="Help Instance"
+                 start-page="main.topic">
+
+    <toc-element topic="main.topic"/>
+    <toc-element topic="install-marian.topic"/>
+    <toc-element topic="install-tools.topic"/>
+    <toc-element topic="get-data.topic"/>
+    <toc-element topic="preprocessing.topic"/>
+    <toc-element topic="train.topic"/>
+    <toc-element topic="preparing-translation.topic"/>
+    <toc-element topic="translation.topic"/>
+</instance-profile>

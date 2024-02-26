@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Preparations for Translation" id="preparing-translation">
+
+    <p>This section guides you through the preparations for translation.</p>
+
+    <procedure type="steps">
+        <step>
+            Open the terminal.
+            (Press: <shortcut>Ctrl</shortcut>+<shortcut>Alt
+            </shortcut>+<shortcut>T</shortcut>)
+        </step>
+        <step>
+            Switch to the <code>marian</code> directory.
+            (Execute: <code>cd ~/marian</code>)
+        </step>
+        <step>
+            Create the file <code>translate.sh</code>.
+            (Execute: <code>nano translate.sh</code>)
+        </step>
+        <step>
+            <p>
+                Paste the following code into the file using
+                <shortcut>Ctrl</shortcut>+<shortcut>Shift</shortcut>+
+                <shortcut>V</shortcut>:
+            </p>
+            <code-block lang="bash" collapsible="true">
+
+                # preprocessing
+
+                filename=input
+
+                SRC=[SOURCE]
+
+                TRG=[TARGET]
+
+                marian=~/marian
+
+                mosesdecoder=$marian/marian-examples/tools/moses-scripts
+
+                subword_nmt=$marian/marian-examples/tools/subword-nmt/subword_nmt
+
+
+                # tokenize
+
+                cat input/$filename \
+                | $mosesdecoder/scripts/tokenizer/normalize-punctuation.perl -l $SRC \
+                | $mosesdecoder/scripts/tokenizer/tokenizer.perl -a -l $SRC \
+                > input/$filename.tok.$SRC
+
+
+                # apply truecaser
+
+                $mosesdecoder/scripts/recaser/truecase.perl -model $marian/model/tc.$SRC \
+                &lt; input/$filename.tok.$SRC \
+                > input/$filename.tc.$SRC
+
+
+                # apply BPE
+
+                python3 $subword_nmt/apply_bpe.py -c $marian/model/$SRC$TRG.bpe \
+                &lt; input/$filename.tc.$SRC \
+                > input/$filename.bpe.$SRC
+
+
+
+                # translation
+
+                marian_decoder=$marian/build/marian-decoder$EXT
+
+
+
+                # set chosen gpus
+
+                GPUS=0
+
+                if [ $# -ne 0 ]
+
+                then
+
+                GPUS=$@
+
+                fi
+
+                echo Using GPUs: $GPUS
+
+
+
+                cat input/$filename.bpe.$SRC \
+                | $marian_decoder -c $marian/model/model.npz.best-translation.npz.decoder.yml -d $GPUS -b 12 -n1 --mini-batch 64 --maxi-batch 10 --maxi-batch-sort src \
+                | sed 's/\@\@ //g' \
+                | $mosesdecoder/scripts/recaser/detruecase.perl \
+                | $mosesdecoder/scripts/tokenizer/detokenizer.perl -l en \
+                > output/$filename.$TRG.output
+            </code-block>
+            <note>
+                Replace [SOURCE] and [TARGET] with language codes such as
+                en, de, fr etc.).
+            </note>
+        </step>
+        <step>
+            Allow the file to be executed.
+            (<code>chmod +x translate.sh</code>)
+        </step>
+        <step>
+            Create the input directory.
+            (Execute: <code>mkdir input</code>)
+        </step>
+        <step>
+            Create the output directory.
+            (Execute: <code>mkdir output</code>)
+        </step>
+        <step>
+            Switch to the <code>input</code> directory.
+            (Execute: <code>cd input</code>)
+        </step>
+        <step>
+            Create the input file.
+            (Execute: <code>nano input</code>)
+        </step>
+        <step>
+            <p>
+                Paste the source text into the file using
+                <shortcut>Ctrl</shortcut>+<shortcut>Shift</shortcut>+
+                <shortcut>V</shortcut>.
+            </p>
+            <warning>Each line should contain at most one sentence.</warning>
+        </step>
+        <step>
+            Close the file.
+            (<shortcut>Ctrl</shortcut>+<shortcut>X</shortcut>)
+        </step>
+        <step>
+            Save the changes.
+            (<shortcut>Y</shortcut>)
+        </step>
+    </procedure>
+
+    <p>You can now proceed to the last step and use the model for translation.</p>
+</topic>

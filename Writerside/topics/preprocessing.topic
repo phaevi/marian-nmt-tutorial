@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:https="http://www.w3.org/1999/xhtml"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Preprocessing the parallel corpus" id="preprocessing">
+
+    <var name="section" value="preprocessing the parallel corpus"/>
+    <var name="filename" value="preprocessing.sh"/>
+    <var name="code" value="
+        # replace [SOURCE] and [TARGET] with language codes such as en, de, fr etc.
+
+        src=[SOURCE]
+
+        TRG=[TARGET]
+
+        # Number of merge operations for byte pair encoding
+
+        bpe_operations=40000
+
+        # path to moses decoder: https://github.com/moses-smt/mosesdecoder
+
+        mosesdecoder=~/marian/marian-examples/tools/moses-scripts
+
+        # path to subword segmentation scripts: https://github.com/rsennrich/subword-nmt
+
+        subword_nmt=~/marian/marian-examples/tools/subword-nmt/subword_nmt
+
+        cd ~/marian
+
+        # tokenize
+
+        for prefix in corpus corpus-dev corpus-test
+
+        do
+
+            cat data/$prefix.$src \
+                | $mosesdecoder/scripts/tokenizer/normalize-punctuation.perl -l $src \
+                | $mosesdecoder/scripts/tokenizer/tokenizer.perl -a -l $src > data/$prefix.tok.$src
+            cat data/$prefix.$TRG \
+                | $mosesdecoder/scripts/tokenizer/normalize-punctuation.perl -l $TRG \
+                | $mosesdecoder/scripts/tokenizer/tokenizer.perl -a -l $TRG > data/$prefix.tok.$TRG
+        done
+
+
+
+        # clean empty and long sentences, and sentences with high source-target ratio (training corpus only)
+
+        $mosesdecoder/scripts/training/clean-corpus-n.perl data/corpus.tok $src $TRG data/corpus.tok.clean 1 80
+
+
+
+        # train truecaser
+
+        $mosesdecoder/scripts/recaser/train-truecaser.perl -corpus data/corpus.tok.clean.$src -model model/tc.$src
+
+        $mosesdecoder/scripts/recaser/train-truecaser.perl -corpus data/corpus.tok.clean.$TRG -model model/tc.$TRG
+
+
+
+        # apply truecaser (cleaned training corpus)
+
+        for prefix in corpus
+
+        do
+
+            $mosesdecoder/scripts/recaser/truecase.perl -model model/tc.$src < data/$prefix.tok.clean.$src > data/$prefix.tc.$src
+
+            $mosesdecoder/scripts/recaser/truecase.perl -model model/tc.$TRG < data/$prefix.tok.clean.$TRG > data/$prefix.tc.$TRG
+
+        done
+
+
+
+        # apply truecaser (dev/test files)
+
+        for prefix in corpus-dev corpus-test
+
+        do
+
+            $mosesdecoder/scripts/recaser/truecase.perl -model model/tc.$src < data/$prefix.tok.$src > data/$prefix.tc.$src
+
+            $mosesdecoder/scripts/recaser/truecase.perl -model model/tc.$TRG < data/$prefix.tok.$TRG > data/$prefix.tc.$TRG
+
+        done
+
+        # train BPE
+
+        cat data/corpus.tc.$src data/corpus.tc.$TRG | python3 $subword_nmt/learn_bpe.py -s $bpe_operations > model/$src$TRG.bpe
+
+
+        # apply BPE
+
+        for prefix in corpus corpus-dev corpus-test
+
+        do
+
+            python3 $subword_nmt/apply_bpe.py -c model/$src$TRG.bpe < data/$prefix.tc.$src > data/$prefix.bpe.$src
+
+            python3 $subword_nmt/apply_bpe.py -c model/$src$TRG.bpe < data/$prefix.tc.$TRG > data/$prefix.bpe.$TRG
+
+        done
+
+        "/>
+    <var name="additionally" value="
+        Replace [SOURCE] and [TARGET] with language codes such as en, de, fr etc.).
+        "/>
+    <var name="result" value="preprocessed the files"/>
+
+    <include from="template-get.topic" element-id="get"/>
+</topic>

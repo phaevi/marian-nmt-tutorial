@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Installing Marian NMT" id="install-marian">
+
+    <var name="section" value="the installation of Marian NMT"/>
+    <var name="filename" value="installmarian.sh"/>
+    <var name="code" value="
+        #replace [VERISION] with the CUDA version you have installed (e.g. 12.3)
+
+        git clone https://github.com/marian-nmt/marian
+        cd ~
+        cd marian
+        mkdir build
+        cd build
+        cmake -DCOMPILE_SERVER=on -DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-[VERSION]/ ..
+        make -j4
+        "/>
+    <var name="additionally" value="
+        Replace [VERISION] with the CUDA version you have installed (e.g. 12.3).
+        "/>
+    <var name="result" value="installed Marian NMT"/>
+
+    <include from="template-get.topic" element-id="get"/>
+</topic>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Downloading and Spitting the Parallel Corpus" id="get-data">
+
+    <var name="section" value="downloading and splitting the parallel corpus"/>
+    <var name="filename" value="getcorpus.sh"/>
+    <var name="code" value="
+        # replace [SOURCE] and [TARGET] with language codes such as en, de, fr etc.
+        # the order must match the order found on the statmt website (e.g. de-en, NOT en-de)
+
+        src=[SOURCE]
+
+        trg=[TARGET]
+
+        mkdir marian/data
+
+        cd marian/data
+
+        # get SOURCE-TARGET training data from Europarl website
+
+        wget -nc http://www.statmt.org/europarl/v7/$src-$trg.tgz -O europarl-$src-$trg.tgz
+
+        # extract data from archive
+
+        tar -xf europarl-$src-$trg.tgz
+
+        # shuffle files, i.e. bring the lines of the source and target files in random order
+        # It needs to be the same random order for both files. This is ensured by providing
+        # pseudo-random bytes (for simplicity we use the source file for this purpose)
+
+        shuf --random-source=europarl-v7.$src-$trg.de europarl-v7.$src-$trg.$src > corpus-full.$src
+        shuf --random-source=europarl-v7.$src-$trg.de europarl-v7.$src-$trg.$trg > corpus-full.$trg
+
+        # Make data splits for training, development and test sets
+
+        head -n -4000 corpus-full.$src > corpus.$src
+        head -n -4000 corpus-full.$trg > corpus.$trg
+        tail -n 4000 corpus-full.$src > corpus-dev-test.$src
+        tail -n 4000 corpus-full.$trg > corpus-dev-test.$trg
+        head -n 2000 corpus-dev-test.$src > corpus-dev.$src
+        head -n 2000 corpus-dev-test.$trg > corpus-dev.$trg
+        tail -n 2000 corpus-dev-test.$src > corpus-test.$src
+        tail -n 2000 corpus-dev-test.$trg > corpus-test.$trg
+
+        cd ..
+        "/>
+    <var name="additionally" value="
+        Replace [SOURCE] and [TARGET] with language codes such as en, de, fr etc.).
+        The order of languages must match one pair found on https://www.statmt.org/europarl/.
+        "/>
+    <var name="result" value="downloaded and split the parallel corpus"/>
+
+    <include from="template-get.topic" element-id="get"/>
+</topic>
